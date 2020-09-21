@@ -1,0 +1,6 @@
+<h2>Sign up</h2>
+
+<input #name type="text" />
+<app-error [error]="error"></app-error>
+<input #password type="password" />
+<button (click)="signup(name.value, password.value)">Sign up</button>

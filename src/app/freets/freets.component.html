@@ -1,5 +1,31 @@
 <h2>Freets</h2>
 
-<div *ngFor="let freet of freets">
+<app-freet-search (notifySearch)="searchFreets($event)"
+                  (notifySort)="sortFreets($event)">
+</app-freet-search>
+
+<div *ngFor="let freet of freets; index as index">
+
   <span>{{freet.author}}: {{freet.message}}</span>
+  {{freet.votes}}
+
+  <!-- must be logged in to mutate a freet -->
+  <span *ngIf="sessionService.loggedInName">
+
+    <!-- the author can't vote his freets -->
+    <span *ngIf="freet.author !== sessionService.loggedInName">
+      <button (click)="upvote(freet)">Upvote</button>
+      <button (click)="downvote(freet)">Downvote</button>
+    </span>
+
+    <!-- only the author can edit and delete his freets -->
+    <span *ngIf="freet.author === sessionService.loggedInName">
+      <app-edit-freet [freet]="freet"
+                      (notifyEdit)="onEdit(freet)"></app-edit-freet>
+      <button (click)="deleteFreet(freet, index)">X</button>
+    </span>
+
+  </span>
+
 </div>
+

@@ -1,0 +1,7 @@
+<h2>Change name</h2>
+
+<input #name type="text" placeholder="Enter new name" />
+<app-error [error]="error"></app-error>
+<button (click)="changeName(name.value)">
+  Change name
+</button>

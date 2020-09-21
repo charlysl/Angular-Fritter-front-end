@@ -1,0 +1,9 @@
+<h3>Freet search</h3>
+
+<input #author type="text" placeholder="Enter freet author" />
+
+<button (click)="notifySearch.emit(author.value)">
+  Search
+</button>
+
+<input #sort type="checkbox" (click)="notifySort.emit(sort.checked)" />

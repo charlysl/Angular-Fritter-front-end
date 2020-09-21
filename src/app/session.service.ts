@@ -1,11 +1,14 @@
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, throwError } from 'rxjs';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { catchError, tap } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
 })
 export class SessionService {
+
+  loggedInName: string;
 
   private baseUrl = '/api/session';
 
@@ -19,8 +22,27 @@ export class SessionService {
 
   login(name: string, password: string): Observable<any> {
     // TODO handle login error
-    return this.http.post(this.baseUrl + '/login',
+    return this.http.post( `${this.baseUrl}/login`,
                           {name, password},
-                          this.httpOptions);
+                          this.httpOptions)
+    .pipe(
+      tap( _ => this.loggedInName = name ),
+      catchError((err: any): any => {
+        if (err.status === 403) {
+          return throwError(new Error('InvalidCredentials'));
+        } else {
+          console.error('Caught unexpected error', err);
+          return throwError(new Error('UnexpectedError'));
+        }
+      })
+    );
   }
+
+  logout(): Observable<any> {
+    return this.http.delete(`${this.baseUrl}/logout`)
+    .pipe(
+      tap(_ => this.loggedInName = '')
+    );
+  }
+
 }

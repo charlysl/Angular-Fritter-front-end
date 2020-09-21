@@ -1,5 +1,11 @@
-<h2>Sign in</h2>
+<h2 *ngIf="!sessionService.loggedInName">
+  Sign in
+</h2>
+<h2 *ngIf="sessionService.loggedInName">
+  Logged in as {{sessionService.loggedInName}}
+</h2>
 
 <input #name type="text" placeholder="Enter your username"/>
+<app-error [error]="error"></app-error>
 <input #password type="password" placeholder="Enter your password" />
 <button (click)="login(name.value, password.value)">Sign in</button>

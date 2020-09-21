@@ -3,4 +3,5 @@ export interface Freet {
   author: string;
   message: string;
   votes: number;
+  order?:number;
 }

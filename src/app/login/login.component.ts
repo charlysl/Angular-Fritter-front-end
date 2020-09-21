@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
 import { SessionService } from '../session.service';
+import { Utils } from '../utils';
 
 @Component({
   selector: 'app-login',
@@ -9,12 +10,17 @@ import { SessionService } from '../session.service';
 })
 export class LoginComponent implements OnInit {
 
-  constructor(private sessionService: SessionService) { }
+  constructor(public sessionService: SessionService) { }
+
+  error = '';
 
   ngOnInit(): void {
   }
 
   login(name: string, password: string): void {
-    this.sessionService.login(name, password).subscribe();
+    this.sessionService.login(name, password).subscribe(
+      () => this.error = '', // do nothing
+      (err) => this.error = Utils.mapError(err)
+    );
   }
 }
